@@ -1,0 +1,158 @@
+1. Quantas linhas e colunas existem no dataset?
+		print(f"Linhas e Colunas: {df.shape}")
+		300/9
+2. Quais são os nomes das colunas?
+		print(f"Nomes das Colunas: {df.columns.tolist()}")
+		['Data_Venda', 'Canal_Venda', 'UF', 'Produto', 'Preco_Unitario', 'Quantidade', 'Custo_Unitario', 'Receita', 'Lucro']
+3. Quais são os tipos de dados de cada coluna?
+		df.info()
+		Data columns (total 9 columns):
+ #   Column          Non-Null Count  Dtype  
+---  ------          --------------  -----  
+ 0   Data_Venda      300 non-null    object 
+ 1   Canal_Venda     293 non-null    object 
+ 2   UF              294 non-null    object 
+ 3   Produto         300 non-null    object 
+ 4   Preco_Unitario  295 non-null    float64
+ 5   Quantidade      300 non-null    int64  
+ 6   Custo_Unitario  300 non-null    float64
+ 7   Receita         300 non-null    float64
+ 8   Lucro           300 non-null    float64
+dtypes: float64(4), int64(1), object(4)
+
+	-----------------------------------------------------------------------------------------------------------
+
+
+Atividade 2 — Qualidade dos dados
+Agora investigue se existem problemas de qualidade.
+Responda:
+
+1. Existem valores nulos?
+		df.isnull().sum()
+		Sim
+2. Em quais colunas eles aparecem?
+		Canal_Venda: 7 valores nulos
+		UF: 6 valores nulos
+		Preco_Unitario: 5 valores nulos
+
+3. Existem categorias escritas de formas diferentes para o mesmo canal de venda?
+	df['Canal_Venda'].value_counts()
+	E-commerce e e-commerce 
+	Loja Física e loja fisica
+	-----------------------------------------------------------------------------------------------------------
+	
+Atividade 3 — KPIs do negócio
+Considere que você é analista de um varejista e precisa apresentar indicadores para a gestão.
+Calcule os seguintes KPIs:
+
+1. Receita total
+	receita_total = df['Receita'].sum()
+	Receita Total: R$ 707,535.36
+	
+2. Lucro total
+	lucro_total = df['Lucro'].sum()
+	Lucro Total: R$ 189,625.88
+	
+3. Ticket médio (Receita média por registro)
+	ticket_medio = df['Receita'].mean()
+	Ticket Médio: R$ 2,358.45
+
+4. Quantidade total vendida
+	quantidade_total_vendida = df['Quantidade'].sum()
+	Quantidade Total Vendida: 502
+	
+
+Depois, escreva uma breve interpretação:
+- O desempenho geral parece positivo?
+
+O desempenho geral parece positivo: A Receita Total de R$ 707.535,36 e o Lucro Total de R$ 189.625,88 indicam um volume de vendas e uma rentabilidade saudáveis.
+	
+- Receita e lucro caminham juntos?
+	A proporção entre Receita e Lucro sugere que a empresa está conseguindo converter suas vendas em ganhos efetivos, o que pode indicar uma boa gestão de custos e margens de lucro adequadas. O Ticket Médio de R$ 2.358,45 e a Quantidade Total Vendida de 502 itens demonstram o volume e o valor médio das transações.
+
+
+	-----------------------------------------------------------------------------------------------------------
+
+Atividade 4 — Respondendo perguntas do gestor com dados
+
+Use o dataset para responder:
+
+1. Qual canal gera mais receita?
+	canal_mais_receita = df.groupby('Canal_Venda')['Receita'].sum().nlargest(1)
+	Canal_Venda
+	E-commerce    220215.54
+	Name: Receita, dtype: float64
+	O canal que gera mais receita é a Loja Física, com um valor significativo.
+	
+	
+2. Qual produto gera mais lucro?
+	produto_mais_lucro = df.groupby('Produto')['Lucro'].sum().nlargest(1)
+	print(produto_mais_lucro)
+	Produto
+	Notebook    69818.57
+	Name: Lucro, dtype: float64
+	O Notebook é o produto que gera o maior lucro.
+	
+3. Quais UFs concentram maior receita?
+	ufs_maior_receita = df.groupby('UF')['Receita'].sum().nlargest(3)
+	print(ufs_maior_receita)
+	UF
+	SP    133727.80
+	MG    103438.61
+	RJ    100284.68
+	Name: Receita, dtype: float64
+	Os estados de SP, MG e RJ são os que concentram a maior receita. Isso aponta para regiões de alta demanda e sucesso de vendas, onde a empresa pode focar seus esforços de expansão, publicidade e logística para consolidar sua presença e otimizar a distribuição.
+
+Para cada resposta:
+- mostre o código;
+- apresente o resultado;
+- escreva uma interpretação curta.
+
+
+Atividade 5 — Escolhendo a visualização certa
+
+Sem necessariamente construir os gráficos ainda, responda:
+
+a) Qual gráfico você usaria para mostrar a evolução da receita ao longo do tempo?  
+   Para mostrar a evolução da receita ao longo do tempo, o gráfico mais adequado seria um Gráfico de Linhas. Ele é excelente para visualizar tendências, padrões e flutuações de dados contínuos em uma série temporal, permitindo identificar facilmente crescimentos, quedas ou sazonalidades na receita.
+   
+b) Qual gráfico você usaria para comparar a receita entre canais de venda?  
+	Gráfico de Barras é ideal para a comparação de valores entre categorias discretas, facilitando a visualização de qual canal contribui com a maior ou menor receita.
+
+c) Qual gráfico você usaria para mostrar a distribuição dos preços unitários?
+	Histograma é o gráfico mais apropriado. Ele permite visualizar a frequência com que os preços unitários ocorrem dentro de diferentes intervalos (bins), o que ajuda a entender a forma da distribuição, a identificar concentrações de preços, assimetrias ou valores atípicos.
+
+Em seguida, gere ao menos um gráfico com `pandas` ou `matplotlib`.
+
+plt.figure(figsize=(10, 6))
+receita_por_canal.plot(kind='bar', color='skyblue')
+plt.title('Receita Total por Canal de Venda')
+plt.xlabel('Canal de Venda')
+plt.ylabel('Receita Total (R$)')
+plt.xticks(rotation=45, ha='right')
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+GRAFICO ABAIXO
+
+
+
+
+Ao final, seu notebook deve conter:
+
+- leitura do dataset;
+- inspeção inicial;
+- análise de qualidade dos dados;
+- cálculo de KPIs;
+- respostas às perguntas de negócio;
+- pelo menos um gráfico;
+- comentários interpretando os resultados.
+
+Explique em 4 a 6 linhas:
+
+Por que uma análise de dados não deve se limitar a “fazer gráficos bonitos”?
+
+Uma análise de dados vai muito além de gráficos bonitos porque seu objetivo principal é extrair insights valiosos e embasar decisões estratégicas. 
+Gráficos são ferramentas para comunicar esses insights, mas o verdadeiro valor está na exploração dos dados, na identificação de padrões, tendências e anomalias. 
+É preciso interpretar o que os números e as visualizações realmente significam para o negócio, transformando dados em conhecimento acionável para resolver problemas e impulsionar o crescimento. 
+Sem essa profundidade, os gráficos são apenas imagens sem propósito.
